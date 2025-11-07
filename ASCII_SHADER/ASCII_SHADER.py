@@ -3,20 +3,22 @@ imagevar = Image.open("D:\Moonshot\ASCII_SHADER\sololevel.jpeg")
 imagewidth = imagevar.width
 imageheight = imagevar.height
 
-ScaleFactor = 1.0
+ScaleFactor = 0.3
 
-oneCharWidth = 8  # we have to scale the image based on character width and height to maintain aspect ratio
+oneCharWidth = 10 # we have to scale the image based on character width and height to maintain aspect ratio
 oneCharHeight = 18 
+print(imagewidth,imageheight,imageheight/imagewidth)
 
 
-imageload = imagevar.load() #load() method is used to explicitly load the image data into memory when you call image.open it just reads the file header and necessary metadata not the entire image data
+# imageload = imagevar.load() #load() method is used to explicitly load the image data into memory when you call image.open it just reads the file header and necessary metadata not the entire image data
 
-imagevar = imagevar.resize((int(imagewidth * ScaleFactor), int(imageheight * ScaleFactor *(oneCharWidth/oneCharHeight)))) #scale the image based on scalefactor
+imagevar = imagevar.resize((int(imagewidth * ScaleFactor), int(imageheight * ScaleFactor * (oneCharWidth/oneCharHeight) )), Image.NEAREST) #scale the image based on scalefactor
 
 imagewidth = imagevar.width
 imageheight = imagevar.height
 
 imageload = imagevar.load() # Get pixel access after resize
+print(imageheight,imagewidth,imageheight/imagewidth)
 
 asciichars = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,. " [::-1]
 asciilen = len(asciichars)
@@ -24,9 +26,14 @@ asciilen = len(asciichars)
 textfile = open("output.txt", "w") 
 
 fnt = ImageFont.truetype("D:/Moonshot/arial.ttf", 15)
+print(fnt)
 
 
-outputImage = Image.new("RGB", (oneCharWidth * imagewidth, oneCharHeight * imageheight), color=(0,0,0)) #the ascii characters are not square
+imagevar = Image.new('RGB', (oneCharWidth * imagewidth, oneCharHeight * imageheight), color=(0,0,0)) #the ascii characters are not square
+theight, thewidth = imagevar.size
+print(theight,thewidth,theight/thewidth)
+
+Drawimagevar = ImageDraw.Draw(imagevar)
 
 def get_asciichar(brightness):
     #I need to map 0-255 brightness to 0-asciilen
@@ -42,7 +49,7 @@ for i in range(imageheight):
         textfile.write(get_asciichar(brightness))
 
         #drawing action
-        # d.text((j*oneCharWidth,i*oneCharHeight),get_asciichar(brightness), font=fnt, fill=(r, g, b))
+        Drawimagevar.text((j*oneCharWidth,i*oneCharHeight),get_asciichar(brightness), font=fnt, fill=(r, g, b))
     textfile.write("\n")
 
 imagevar.save("output.jpeg")
