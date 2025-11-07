@@ -1,17 +1,32 @@
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 imagevar = Image.open("D:\Moonshot\ASCII_SHADER\sololevel.jpeg")
 imagewidth = imagevar.width
 imageheight = imagevar.height
 
+ScaleFactor = 1.0
+
+oneCharWidth = 8  # we have to scale the image based on character width and height to maintain aspect ratio
+oneCharHeight = 18 
+
+
 imageload = imagevar.load() #load() method is used to explicitly load the image data into memory when you call image.open it just reads the file header and necessary metadata not the entire image data
+
+imagevar = imagevar.resize((int(imagewidth * ScaleFactor), int(imageheight * ScaleFactor *(oneCharWidth/oneCharHeight)))) #scale the image based on scalefactor
+
+imagewidth = imagevar.width
+imageheight = imagevar.height
+
+imageload = imagevar.load() # Get pixel access after resize
 
 asciichars = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,. " [::-1]
 asciilen = len(asciichars)
 
 textfile = open("output.txt", "w") 
 
-print(imageheight)
-print(imagewidth)
+fnt = ImageFont.truetype("D:/Moonshot/arial.ttf", 15)
+
+
+outputImage = Image.new("RGB", (oneCharWidth * imagewidth, oneCharHeight * imageheight), color=(0,0,0)) #the ascii characters are not square
 
 def get_asciichar(brightness):
     #I need to map 0-255 brightness to 0-asciilen
@@ -25,6 +40,9 @@ for i in range(imageheight):
         brightness = int(r/3 + g/3 + b/3) #take rgb average for brigtness value
         imageload[j,i] = (brightness, brightness, brightness)
         textfile.write(get_asciichar(brightness))
+
+        #drawing action
+        # d.text((j*oneCharWidth,i*oneCharHeight),get_asciichar(brightness), font=fnt, fill=(r, g, b))
     textfile.write("\n")
 
 imagevar.save("output.jpeg")
