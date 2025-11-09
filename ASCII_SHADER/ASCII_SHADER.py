@@ -1,9 +1,9 @@
 from PIL import Image, ImageDraw, ImageFont
-imagevar = Image.open("D:\Moonshot\ASCII_SHADER\sololevel.jpeg")
+imagevar = Image.open("D:\Moonshot\ASCII_SHADER\REDEYES.jpg") #CHECK EXTENSION!!!
 imagewidth = imagevar.width
 imageheight = imagevar.height
 
-ScaleFactor = 0.3
+ScaleFactor = 0.2
 
 oneCharWidth = 10 # we have to scale the image based on character width and height to maintain aspect ratio
 oneCharHeight = 18 
@@ -17,7 +17,7 @@ imagevar = imagevar.resize((int(imagewidth * ScaleFactor), int(imageheight * Sca
 imagewidth = imagevar.width
 imageheight = imagevar.height
 
-imageload = imagevar.load() # Get pixel access after resize
+imageload = imagevar.load() #load() method is used to explicitly load the image data into memory when you call image.open it just reads the file header and necessary metadata not the entire image data
 print(imageheight,imagewidth,imageheight/imagewidth)
 
 asciichars = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,. " [::-1]
